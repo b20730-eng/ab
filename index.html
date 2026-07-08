@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>슬기로운 이화 생활</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
+    <!-- 구글 티처블 머신 라이브러리 -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
     <style>
-        /* 온글잎 레디오 볼펜체 온라인 다이렉트 주소 연동 */
+        /* 온글잎 레디오 볼펜체 연동 */
         @import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/Ownglyph_RadioBolpen.woff2');
 
-        /* 폰트 및 가독성 세팅 */
         body, input, button, textarea, select {
             font-family: 'Ownglyph_RadioBolpen', sans-serif;
             font-size: 1.5rem; 
@@ -25,13 +26,11 @@
         .page { display: none; }
         .page.active { display: block; }
         
-        /* 테마 컬러 */
         .bg-ewha-pastel { background-color: #f3faf6; } 
         .bg-ewha-soft-green { background-color: #b2e4c4; } 
         .bg-ewha-deep { background-color: #0b532a; }
         .text-ewha-deep { color: #0b532a; }
         
-        /* 공책 스프링 디자인 */
         .spring-wire {
             width: 8px;
             height: 28px;
@@ -82,6 +81,7 @@
             
             <div id="left-content" class="w-full p-8 flex flex-col justify-between min-h-[580px] transition-all duration-300">
 
+                <!-- ================= PAGE 1: 로그인 ================= -->
                 <div id="page-login" class="page active flex flex-col justify-between h-full flex-grow">
                     <div class="text-center my-auto py-6">
                         <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-emerald-200 shadow-inner">
@@ -104,6 +104,7 @@
                     </div>
                 </div>
 
+                <!-- ================= PAGE 1-2: 회원가입 ================= -->
                 <div id="page-signup" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-3xl font-black text-ewha-deep mb-2">📝 회원가입</h2>
@@ -131,6 +132,7 @@
                     </div>
                 </div>
 
+                <!-- ================= PAGE 2: 메인 메뉴 선택 ================= -->
                 <div id="page-main-menu" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-2xl font-black text-stone-700 mb-6">오늘 남길 기록을 골라줘! 📆</h2>
@@ -160,6 +162,7 @@
                     <button onclick="logout()" class="w-full mt-8 text-base text-stone-400 text-center hover:underline font-bold">완전히 닫기(로그아웃)</button>
                 </div>
 
+                <!-- ================= PAGE 3: 다이어트 목표 설정 ================= -->
                 <div id="page-goal" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-2xl font-black text-ewha-deep mb-2">🎯 오늘 붙일 미션 스티커</h2>
@@ -190,6 +193,7 @@
                     <button onclick="submitGoal()" class="w-full bg-ewha-soft-green text-ewha-deep font-black py-4 rounded-2xl border-3 border-emerald-700 mt-6 text-2xl shadow-md">목표 붙이고 식판 스캔하러 가기 📸</button>
                 </div>
 
+                <!-- ================= PAGE 4: 식사 전 급식 사진 업로드 ================= -->
                 <div id="page-meal-before" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-2xl font-black text-ewha-deep mb-2">📸 먹기 전 식판 스캔하기</h2>
@@ -198,7 +202,7 @@
                         <div class="border-4 border-dashed border-emerald-300 rounded-3xl p-8 text-center bg-stone-50/30 mb-6 cursor-pointer hover:bg-emerald-50/20 transition" onclick="document.getElementById('file-before').click()">
                             <span class="text-5xl block mb-2">🖼️</span>
                             <span id="txt-file-before" class="text-base text-stone-500 font-bold block">여기 터치해서 사진 첨부하기</span>
-                            <input type="file" id="file-before" class="hidden" accept="image/*" onchange="runBeforeAIAnalysis()">
+                            <input type="file" id="file-before" class="hidden" accept="image/*" onchange="simulateAIAnalysis('before')">
                         </div>
 
                         <div id="loading-before" class="hidden text-center py-4">
@@ -220,6 +224,7 @@
                     </div>
                 </div>
 
+                <!-- ================= PAGE 5: 식사 후 식판 사진 (진짜 인공지능 분석) ================= -->
                 <div id="page-meal-after" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-2xl font-black text-ewha-deep mb-2">🧼 다 비운 식판 도장 받기</h2>
@@ -251,11 +256,13 @@
                     </div>
                 </div>
 
+                <!-- ================= PAGE 6: 맞춤형 운동 추천 (스마트 분배 로직 적용) ================= -->
                 <div id="page-exercise" class="page flex flex-col justify-between h-full flex-grow">
                     <div>
                         <h2 class="text-2xl font-black text-ewha-deep mb-2">🏋️‍♀️ 기구 맞춤형 운동 루틴 짜기</h2>
                         <div id="exercise-context" class="text-base bg-stone-50 p-4 rounded-2xl text-stone-600 mb-4 border-2 border-dashed border-stone-200 leading-relaxed font-bold"></div>
 
+                        <!-- 1단계: 기구 선택 -->
                         <div id="exercise-selection-area">
                             <p class="text-lg text-amber-800 mb-3 font-black">👉 오늘 체육관에서 쓰고 싶은 기구를 모두 골라줘!</p>
                             <div class="grid grid-cols-1 gap-2.5 max-h-[250px] overflow-y-auto pr-2">
@@ -277,7 +284,7 @@
                                     <input type="checkbox" value="stepper" class="eq-checkbox mr-4 w-6 h-6 accent-amber-600 mt-1">
                                     <div>
                                         <span class="font-black text-xl text-stone-700 block">🪜 스텝퍼</span>
-                                        <span class="text-sm text-stone-500 font-bold block mt-0.5">발판 두 개를 양발로 번갈아 밟으며 계단을 오르는 느낌의 기구야.</span>
+                                        <span class="text-sm text-stone-500 font-bold block mt-0.5">발판 두 개를 번갈아 밟으며 계단을 오르는 느낌의 기구야.</span>
                                     </div>
                                 </label>
                                 <label class="flex items-start p-3.5 border-3 border-stone-200 rounded-2xl cursor-pointer hover:border-amber-400 bg-white transition">
@@ -298,9 +305,10 @@
                             <button onclick="generateRoutine()" class="w-full bg-amber-200 text-amber-900 font-black py-3.5 rounded-2xl border-3 border-amber-400 mt-5 text-2xl shadow-md hover:bg-amber-300 transition">선택한 기구들로 루틴 생성 🪄</button>
                         </div>
 
+                        <!-- 2단계: 결과 영역 -->
                         <div id="exercise-result-area" class="hidden">
                             <div class="flex justify-between items-end mb-3 border-b-2 border-dashed border-stone-200 pb-2">
-                                <p class="text-lg text-emerald-700 font-black">✨ 짜잔! 너만을 위한 맞춤 루틴이야!</p>
+                                <p class="text-lg text-emerald-700 font-black">✨ 짜잔! 총량에 맞춰 똑똑하게 나눈 루틴이야!</p>
                                 <button onclick="resetExerciseSelection()" class="text-sm text-stone-400 hover:text-stone-700 font-bold underline">기구 다시 고르기 🔄</button>
                             </div>
                             <div id="dynamic-exercise-list" class="space-y-4 max-h-[300px] overflow-y-auto pr-2 pb-2"></div>
@@ -311,6 +319,7 @@
                     <button onclick="navigate('page-main-menu')" class="w-full bg-ewha-deep text-white font-black py-4 rounded-2xl border-3 border-stone-800 mt-5 text-xl shadow-md hover:opacity-90 transition">메인 화면으로 돌아가기 📖</button>
                 </div>
 
+                <!-- ================= PAGE 7: 게이지 타이머 화면 ================= -->
                 <div id="page-timer" class="page flex flex-col justify-between h-full flex-grow">
                     <div class="text-center mt-8">
                         <h2 class="text-3xl font-black text-ewha-deep mb-2" id="timer-title">운동 이름</h2>
@@ -334,6 +343,7 @@
 
             </div>
 
+            <!-- ================= [오른쪽 영역]: 실시간 기록장 ================= -->
             <div id="right-sidebar" class="hidden w-1/3 p-6 bg-stone-50/40 flex flex-col h-full min-h-[580px] transition-all duration-300">
                 <div class="border-b-4 border-dotted border-stone-200 pb-3 mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-black text-stone-700 flex items-center">🗂️ 실시간 스탬프 일지</h3>
@@ -347,13 +357,14 @@
                 </div>
                 
                 <div class="mt-4 pt-3 border-t-2 border-dashed border-stone-200 text-center">
-                    <p class="text-[11px] font-bold text-stone-300">슬기로운 이화 생활 프로토타입 v10.0 (Real AI)</p>
+                    <p class="text-[11px] font-bold text-stone-300">슬기로운 이화 생활 프로토타입 v12.0 (Smart AI & Time Divider)</p>
                 </div>
             </div>
 
         </div>
     </div>
 
+    <!-- 자바스크립트 로직 -->
     <script>
         let userDatabase = {
             "ewha1886": "1234",
@@ -367,7 +378,6 @@
             currentCalories: 0
         };
 
-        // 네비게이션 제어 (로그인 창일 땐 오른쪽 사이드바 숨김)
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -471,7 +481,6 @@
         const URL = "https://teachablemachine.withgoogle.com/models/1Mwy0xUu1/";
         let tmModel;
 
-        // 식판 전(Before) 분석은 가볍게 모의(Mock)로 넘김 (목표에 따른 멘트만 줌)
         function runBeforeAIAnalysis() {
             const fileInput = document.getElementById('file-before');
             if (!fileInput.files.length) return;
@@ -515,7 +524,7 @@
             }, 2000); 
         }
 
-        // ================= [핵심] 식사 후(After) 진짜 AI 분석 구동! =================
+        // ================= 진짜 AI 연동 분석 =================
         async function runRealAIAnalysis() {
             const fileInput = document.getElementById('file-after');
             if (!fileInput.files.length) return;
@@ -529,7 +538,6 @@
             loadingBox.classList.remove('hidden');
             resultBox.classList.add('hidden');
 
-            // 1. 이미지를 숨겨둔 img 태그에 로드
             const imgEl = document.getElementById('ai-preview-img');
             const reader = new FileReader();
             
@@ -537,17 +545,14 @@
                 imgEl.src = e.target.result;
                 imgEl.onload = async function() {
                     
-                    // 2. 모델이 없다면 불러오기
                     if (!tmModel) {
                         const modelURL = URL + "model.json";
                         const metadataURL = URL + "metadata.json";
                         tmModel = await tmImage.load(modelURL, metadataURL);
                     }
 
-                    // 3. AI 이미지 예측 실행
                     const prediction = await tmModel.predict(imgEl);
                     
-                    // 가장 확률이 높은 클래스 찾기
                     let maxProb = 0;
                     let maxClass = "";
                     for (let i = 0; i < prediction.length; i++) {
@@ -557,7 +562,6 @@
                         }
                     }
 
-                    // 4. 결과 분석
                     generateAfterFeedback(maxClass);
                 }
             };
@@ -570,28 +574,24 @@
             loadingBox.classList.add('hidden');
             resultBox.classList.remove('hidden');
 
-            const baseCal = 750 + Math.floor(Math.random() * 50); // 기본 배식량 750~800 사이
+            const baseCal = 750 + Math.floor(Math.random() * 50);
             let finalCalories = 0;
             let leftoverText = "";
             let leftoverFeedback = "";
             
-            // AI 클래스 이름(다 먹은 식판, 반쯤 먹은 식판 등)에 따라 다르게 피드백
             if (aiClassResult.includes("다") || aiClassResult.includes("Clean")) {
-                // 다 먹음
                 finalCalories = baseCal;
                 leftoverText = "✨ 잔반 0g (클린 식판 인식됨)";
                 leftoverFeedback = "인공지능이 잔반이 없는 깨끗한 식판으로 인식했어! 지구를 지키고 우리 학교 급식 잔반 줄이기 챌린지에 완벽하게 성공! 이화의 자랑이야 👑";
                 resultBox.className = "bg-emerald-50 border-3 border-emerald-200 rounded-2xl p-5 space-y-3 relative shadow-md animate-fadeIn";
             } else if (aiClassResult.includes("반")) {
-                // 반쯤 먹음
                 finalCalories = Math.floor(baseCal * 0.5); 
                 leftoverText = "⚠️ 절반 남김 인식됨 (약 50% 잔반)";
                 leftoverFeedback = "AI가 식판에 절반 정도의 음식이 남은 걸 확인했어! 배가 불렀구나. 다음부터는 배식받을 때 이모님께 미리 양을 적게 달라고 요청해 보자!";
                 resultBox.className = "bg-amber-50 border-3 border-amber-300 rounded-2xl p-5 space-y-3 relative shadow-md animate-fadeIn";
             } else {
-                // 거의 안 먹음 (또는 기타 남은 식판)
                 finalCalories = Math.floor(baseCal * 0.2); 
-                leftoverText = "🚨 잔반 대량 남김 인식됨 (거의 안 먹음)";
+                leftoverText = "🚨 대량 남김 인식됨 (거의 안 먹음)";
                 leftoverFeedback = "거의 다 남긴 걸로 인식됐어 🥲 혹시 입맛에 많이 안 맞았어? 버려지는 음식물 쓰레기를 줄이기 위해 꼭 배식량을 조절해 줘!";
                 resultBox.className = "bg-red-50 border-3 border-red-300 rounded-2xl p-5 space-y-3 relative shadow-md animate-fadeIn";
             }
@@ -636,18 +636,18 @@
 
         // ================= 운동 기구 데이터 =================
         const equipmentData = {
-            'treadmill': { name: '러닝머신', baseTime: 20, unit: '분 유산소', desc: '급식 먹고 칼로리를 가볍게 연소시키는 기초 트레드밀!', guide: '안전 벨트 집게를 옷에 끼우고 녹색 버튼을 눌러 속도 6.0으로 걷자!' },
-            'cycle': { name: '실내자전거 (사이클)', baseTime: 15, unit: '분 하체집중', desc: '무릎 무리 없이 기초 하체 체력을 든든하게 확보!', guide: '안장 높이를 내 골반에 맞추고 강도 바퀴를 3에 둔 뒤 부드럽게 굴려줘!' },
-            'stepper': { name: '스텝퍼', baseTime: 10, unit: '분 힙업코스', desc: '학교 계단 오르는 느낌으로 예쁜 하체 뒤태 라인 잡기!', guide: '발바닥 전체를 패드에 딱 붙이고 엉덩이 근육 힘으로 끝까지 지긋이 밟아 내리기.' },
-            'dumbbell': { name: '아령 (프리웨이트)', baseTime: 15, unit: '분 (3세트 권장)', desc: '교실 공부로 뻐근하게 말린 어깨와 등을 활짝 스트레칭!', guide: '체육관에서 1kg 미니 아령을 골라 만세 하듯 위로 올렸다 내리자.' },
-            'rowing': { name: '로잉머신', baseTime: 10, unit: '분 칼로리폭탄', desc: '짧은 시간 안에 전신의 근력을 모두 깨우는 최고의 버닝 머신!', guide: '발을 단단히 묶고 다리로 밀어내고 이어서 손잡이를 명치로 당겨줘!' }
+            'treadmill': { name: '러닝머신', unit: '분 유산소', desc: '급식 먹고 칼로리를 가볍게 연소시키는 기초 트레드밀!', guide: '안전 벨트 집게를 옷에 끼우고 녹색 버튼을 눌러 속도 6.0으로 걷자!' },
+            'cycle': { name: '실내자전거 (사이클)', unit: '분 하체집중', desc: '무릎 무리 없이 기초 하체 체력을 든든하게 확보!', guide: '안장 높이를 내 골반에 맞추고 강도 바퀴를 3에 둔 뒤 부드럽게 굴려줘!' },
+            'stepper': { name: '스텝퍼', unit: '분 힙업코스', desc: '학교 계단 오르는 느낌으로 예쁜 하체 뒤태 라인 잡기!', guide: '발바닥 전체를 패드에 딱 붙이고 엉덩이 근육 힘으로 끝까지 지긋이 밟아 내리기.' },
+            'dumbbell': { name: '아령 (프리웨이트)', unit: '분 (근력)', desc: '교실 공부로 뻐근하게 말린 어깨와 등을 활짝 스트레칭!', guide: '체육관에서 1kg 미니 아령을 골라 만세 하듯 위로 올렸다 내리자.' },
+            'rowing': { name: '로잉머신', unit: '분 칼로리폭탄', desc: '짧은 시간 안에 전신의 근력을 모두 깨우는 최고의 버닝 머신!', guide: '발을 단단히 묶고 다리로 밀어내고 이어서 손잡이를 명치로 당겨줘!' }
         };
 
         function goToExerciseFlow() {
             const contextBox = document.getElementById('exercise-context');
             if (appState.isLoggedIn) {
                 if (appState.hasMealData) {
-                    contextBox.innerHTML = `📝 오늘 섭취한 영양 에너지(<span class="text-emerald-700">${appState.currentCalories}kcal</span>)와 목표 [<span class="text-emerald-700">${appState.currentGoal}</span>]를 바탕으로, 네가 고른 기구의 타이머를 조절해 줄게!`;
+                    contextBox.innerHTML = `📝 오늘 섭취한 영양 에너지(<span class="text-emerald-700">${appState.currentCalories}kcal</span>)와 목표 [<span class="text-emerald-700">${appState.currentGoal}</span>]를 바탕으로, 전체 운동 강도가 밸런스 있게 유지되도록 타이머를 나누어 줄게!`;
                 } else {
                     contextBox.innerHTML = `📝 목표 [<span class="text-emerald-700">${appState.currentGoal}</span>]에 맞춰 내가 쓸 기구들로 루틴을 만들어 줄게. (식단 기록을 먼저 남기면 연동 효과 200%!)`;
                 }
@@ -682,9 +682,11 @@
             document.getElementById('exercise-result-area').classList.add('hidden');
         }
 
+        // [핵심] 총량 분배 스마트 로직 적용
         function generateRoutine() {
             const checkboxes = document.querySelectorAll('.eq-checkbox:checked');
-            if (checkboxes.length === 0) {
+            const numSelected = checkboxes.length;
+            if (numSelected === 0) {
                 alert("체육관에서 쓰고 싶은 기구를 최소 1개 이상 골라줘! 🏋️‍♀️");
                 return;
             }
@@ -692,24 +694,28 @@
             const listContainer = document.getElementById('dynamic-exercise-list');
             listContainer.innerHTML = '';
 
+            // 1. 칼로리에 비례한 전체 목표 시간 계산 로직
+            let totalTime = 40; // 식단 없으면 기본 40분
+            let calFeedback = "";
+
+            if (appState.hasMealData) {
+                // 100kcal당 5분씩 증가 (기본 10분 + 섭취량/100 * 5)
+                const addedMins = Math.floor(appState.currentCalories / 100) * 5;
+                totalTime = 10 + addedMins;
+                calFeedback = `🔥 섭취량(${appState.currentCalories}kcal) 기준, 총 ${totalTime}분을 ${numSelected}개 기구로 똑똑하게 나눴어!`;
+            } else {
+                calFeedback = `💡 기본 운동량 총 ${totalTime}분을 선택한 ${numSelected}개 기구에 균형 있게 나눠 분배했어!`;
+            }
+
+            if (appState.currentGoal.includes("체중 감량")) totalTime += 10;
+            if (appState.currentGoal.includes("근력 증량")) totalTime += 5;
+
+            // 2. 기구 수에 따른 스마트 N등분 분배 (최소 5분은 보장)
+            let timePerEq = Math.round(totalTime / numSelected);
+            if (timePerEq < 5) timePerEq = 5;
+
             checkboxes.forEach((cb, index) => {
                 const eq = equipmentData[cb.value];
-                let finalTime = eq.baseTime;
-                let extraText = "";
-
-                if (appState.currentGoal.includes("체중 감량") && cb.value !== 'dumbbell') {
-                    finalTime += 5; 
-                    extraText = "🔥 지방 집중 연소를 위해 타이머 5분 추가!";
-                } else if (appState.currentGoal.includes("근력") && cb.value === 'dumbbell') {
-                    finalTime += 5; 
-                    extraText = "💪 근육 펌핑을 위해 타이머 시간 추가!";
-                }
-
-                if (appState.hasMealData && appState.currentCalories > 550 && cb.value !== 'dumbbell') {
-                    finalTime += 5;
-                    extraText = "🔥 오늘 섭취 에너지가 충분해서 +5분 특별 버닝 추가!";
-                }
-
                 const cardId = `exercise-card-${index}`;
 
                 const card = document.createElement('div');
@@ -719,14 +725,14 @@
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-1">
                         <span class="font-black text-xl text-stone-800">${index + 1}. ${eq.name}</span>
-                        <span class="text-sm font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300 shadow-sm">목표: ${finalTime} ${eq.unit}</span>
+                        <span class="text-sm font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300 shadow-sm">목표: ${timePerEq} ${eq.unit}</span>
                     </div>
                     <p class="text-sm text-stone-400 font-bold">${eq.desc}</p>
-                    ${extraText ? `<p class="text-sm text-amber-600 font-black mt-1.5 p-1.5 bg-amber-50 rounded inline-block">💡 ${extraText}</p>` : ''}
+                    <p class="text-sm text-amber-600 font-black mt-1.5 p-1.5 bg-amber-50 rounded inline-block">${calFeedback}</p>
                     
                     <div class="mt-3 p-3 bg-stone-100 rounded-xl flex items-center justify-between border-2 border-stone-200 shadow-inner">
                         <span class="text-xl font-black text-stone-500" id="status-text-${index}">대기 중 ⏳</span>
-                        <button onclick="openTimerPage(${index}, '${eq.name}', ${finalTime})" id="btn-start-${index}" class="px-5 py-2 bg-emerald-200 text-emerald-900 rounded-xl border-2 border-emerald-400 font-black hover:bg-emerald-300 transition shadow-sm">▶️ 타이머 시작</button>
+                        <button onclick="openTimerPage(${index}, '${eq.name}', ${timePerEq})" id="btn-start-${index}" class="px-5 py-2 bg-emerald-200 text-emerald-900 rounded-xl border-2 border-emerald-400 font-black hover:bg-emerald-300 transition shadow-sm">▶️ 타이머 시작</button>
                     </div>
                 `;
                 listContainer.appendChild(card);
@@ -810,7 +816,6 @@
             statusText.classList.replace('text-stone-500', 'text-amber-600');
             startBtn.classList.add('hidden');
 
-            // 운동 기록 우측 스탬프 일지 탭에 추가
             const eqName = document.getElementById('timer-title').innerText;
             const now = new Date();
             const timeStr = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
@@ -818,6 +823,11 @@
             
             const notice = document.getElementById('empty-notice');
             if(notice) notice.style.display = 'none';
+
+            const elapsedSeconds = activeTotalSeconds - activeRemainingSeconds;
+            const m = Math.floor(elapsedSeconds / 60);
+            const s = elapsedSeconds % 60;
+            const timeSpentStr = `${m}분 ${s}초`;
             
             const newItem = document.createElement('div');
             newItem.className = "p-3.5 border-3 border-dashed border-amber-300 rounded-2xl text-sm bg-amber-50/20 shadow-sm font-bold animate-pulse";
@@ -826,11 +836,11 @@
                     <span>📅 오늘 [${timeStr}] 기록</span>
                     <span class="text-amber-600 font-bold">오운완 🐾</span>
                 </div>
-                <p class="text-xs text-stone-500 font-bold leading-tight">운동: ${eqName}<br>상태: 목표 달성 완료! 💪</p>
+                <p class="text-xs text-stone-500 font-bold leading-tight">운동: ${eqName}<br>측정 시간: ${timeSpentStr} 완료! 💪</p>
             `;
             asideList.insertBefore(newItem, asideList.firstChild);
 
-            alert("운동 미션 성공! 오른쪽 실시간 탭에 오운완(오늘 운동 완료) 도장이 찍혔어! 🐾");
+            alert(`운동 성공! 실제 운동한 시간(${timeSpentStr})이 오른쪽 일지에 기록되었어! 🐾`);
             navigate('page-exercise');
         }
     </script>
